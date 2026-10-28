@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>News</h1>
+<div class="grid">
+<form method="post" action="{{ url_for('fetch_news') }}" class="card">
+  <b>Search recent news</b>
+  <label>Topic (optional)</label><input type="text" name="topic" placeholder="e.g. AI layoffs, Gaza, US election">
+  <label>How many</label><input type="number" name="count" value="5" min="1" max="15">
+  <label>Pick stories that suit</label>
+  <div class="checks">{% for p in personas %}<label><input type="checkbox" name="focus" value="{{ p.slug }}" checked> {{ p.name }}</label>{% endfor %}</div>
+  <p><button>Search</button></p>
+</form>
+<form method="post" action="{{ url_for('add_news') }}" class="card">
+  <b>Add a story by hand</b>
+  <label>Headline</label><input type="text" name="title" required>
+  <div class="row"><div style="flex:1"><label>Outlet</label><input type="text" name="outlet"></div><div style="flex:1"><label>Date</label><input type="text" name="published" placeholder="YYYY-MM-DD"></div></div>
+  <label>URL</label><input type="url" name="url">
+  <label>Summary</label><textarea name="summary"></textarea>
+  <p><button class="ghost">Add</button></p>
+</form>
+</div>
+{% for b in batches %}
+  <h2>{{ b.topic }} <span class="muted small">· {{ b.fetched }}</span></h2>
+  {% for item in b['items'] %}
+  <div class="card">
+    <b>{% if item.url %}<a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>{% else %}{{ item.title }}{% endif %}</b>
+    <div class="muted small">{{ item.outlet }} {{ item.published }}</div>
+    <p class="small">{{ item.summary }}</p>
+    {% if item.why %}<p class="small muted">{{ item.why }}</p>{% endif %}
+    <form method="post" action="{{ url_for('draft', item_id=item.id) }}">
+      <div class="checks">{% for p in personas %}<label><input type="checkbox" name="personas" value="{{ p.slug }}"> {{ p.name }}</label>{% endfor %}</div>
+      <div class="row" style="margin-top:6px">
+        <select name="platform" style="width:auto">{% for k in platforms %}<option value="{{ k }}">{{ k|capitalize }}</option>{% endfor %}</select>
+        <input type="text" name="angle" placeholder="Angle note (optional)" style="flex:1;width:auto">
+        <button>Draft comments</button>
+      </div>
+    </form>
+  </div>
+  {% endfor %}
+{% else %}
+<p class="muted">No news yet. Search above or add a story by hand.</p>
+{% endfor %}
+{% endblock %}

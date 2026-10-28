@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block head %}{% if job.status == 'running' %}<meta http-equiv="refresh" content="4">{% endif %}{% endblock %}
+{% block body %}
+<h1>{{ job.label }}</h1>
+{% if job.status == 'running' %}
+<p>Working on it. Persona builds research the web and can take several minutes; this page refreshes itself.</p>
+{% elif job.status == 'failed' %}
+<p class="flash">Failed: {{ job.error }}</p>
+{% endif %}
+<p class="muted small">Started {{ job.started }}</p>
+{% endblock %}

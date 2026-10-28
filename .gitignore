@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+studio-data/
+personas/*/uploads/
+personas/*/history/
+.env
+*.env

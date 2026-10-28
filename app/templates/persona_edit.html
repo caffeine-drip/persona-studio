@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>Edit {{ p.name }}</h1>
+<form method="post">
+  <label>persona.md</label><textarea name="persona_md" style="min-height:480px;font-family:ui-monospace,monospace">{{ p.persona_md }}</textarea>
+  <label>sources.md</label><textarea name="sources_md" style="min-height:240px;font-family:ui-monospace,monospace">{{ p.sources_md }}</textarea>
+  <p><button>Save</button> <a class="btn ghost" href="{{ url_for('persona', slug=p.slug) }}">Cancel</a></p>
+</form>
+{% endblock %}

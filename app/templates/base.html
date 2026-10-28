@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Persona Studio{% endblock %}</title>
+<style>
+:root{--bg:#faf8f5;--fg:#1d1b19;--muted:#6b655e;--line:#e3ddd4;--card:#fff;--accent:#b3261e;--ok:#2e7d32}
+@media (prefers-color-scheme:dark){:root{--bg:#171513;--fg:#ece7e1;--muted:#a39b91;--line:#36312c;--card:#211e1b;--accent:#ef6b5f;--ok:#7bc47f}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif}
+header{border-bottom:1px solid var(--line);padding:12px 16px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+header a{color:var(--fg);text-decoration:none}header .brand{font-weight:700;margin-right:auto}
+main{max-width:980px;margin:0 auto;padding:16px}
+a{color:var(--accent)}h1{font-size:1.5rem;margin:.4em 0}h2{font-size:1.15rem;margin:1.4em 0 .5em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:10px 0}
+.muted{color:var(--muted)}.small{font-size:.85rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+input[type=text],input[type=url],input[type=number],textarea,select{width:100%;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);font:inherit}
+textarea{min-height:90px}label{display:block;font-weight:600;margin:10px 0 4px}
+button,.btn{background:var(--accent);color:#fff;border:0;border-radius:6px;padding:7px 14px;font:inherit;cursor:pointer;text-decoration:none;display:inline-block}
+button.ghost,.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.flash{background:#fff3cd;color:#5c4400;border-radius:6px;padding:8px 12px;margin:8px 0}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:0 8px;font-size:.8rem}
+.pill.approved,.pill.posted{color:var(--ok);border-color:var(--ok)}.pill.rejected{color:var(--accent)}
+pre.md{white-space:pre-wrap;font:13px/1.45 ui-monospace,monospace;max-height:520px;overflow:auto;background:var(--bg);padding:10px;border-radius:6px}
+.checks label{display:inline-flex;gap:4px;font-weight:400;margin:0 12px 0 0}
+</style>
+{% block head %}{% endblock %}
+</head>
+<body>
+<header>
+  <a class="brand" href="{{ url_for('index') }}">Persona Studio</a>
+  <a href="{{ url_for('index') }}">Personas</a>
+  <a href="{{ url_for('news') }}">News</a>
+  <a href="{{ url_for('drafts') }}">Drafts</a>
+  <a href="{{ url_for('settings') }}">Settings</a>
+</header>
+<main>
+  {% if needs_key %}<div class="flash">Add your Claude API key in <a href="{{ url_for('settings') }}">Settings</a> before building personas or drafting.</div>{% endif %}
+  {% for job in running_jobs %}<div class="flash">Running: <a href="{{ url_for('job', job_id=job.id) }}">{{ job.label }}</a></div>{% endfor %}
+  {% for m in get_flashed_messages() %}<div class="flash">{{ m }}</div>{% endfor %}
+  {% block body %}{% endblock %}
+  <p class="muted small" style="margin-top:40px">Every persona here is a simulation built from public material. Drafts are for human review and always carry a disclosure line. Nothing is posted automatically.</p>
+</main>
+</body>
+</html>

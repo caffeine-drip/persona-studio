@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="row" style="justify-content:space-between">
+  <h1>Personas</h1>
+  <a class="btn" href="{{ url_for('new_persona') }}">Add a person</a>
+</div>
+<div class="grid">
+{% for p in personas %}
+  <div class="card">
+    <h2 style="margin-top:0"><a href="{{ url_for('persona', slug=p.slug) }}">{{ p.name }}</a></h2>
+    <div class="muted small">Version {{ p.version }} · built {{ p.built }}</div>
+    <p class="small">{{ p.summary[:180] }}{% if p.summary|length > 180 %}…{% endif %}</p>
+  </div>
+{% else %}
+  <p>No personas yet. Add one to start.</p>
+{% endfor %}
+</div>
+<h2>Next steps</h2>
+<div class="card row">
+  <a class="btn ghost" href="{{ url_for('news') }}">Find today's news</a>
+  <a class="btn ghost" href="{{ url_for('drafts') }}">Review drafts ({{ draft_count }} waiting)</a>
+  {% if news %}<span class="muted small">Last news search: {{ news[0].fetched }}</span>{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block body %}
+{% if persona %}<h1>Update {{ persona.name }}</h1>
+<p class="muted">Add new links, files or notes. The current brief is kept as the base and the old version goes to the history folder.</p>
+{% else %}<h1>Add a person</h1>
+<p class="muted">Give a name and whatever source material you have. Claude researches the rest on the web and writes a persona brief in the same shape as the existing ones.</p>{% endif %}
+<form method="post" enctype="multipart/form-data" class="card">
+  {% if not persona %}<label>Name</label><input type="text" name="name" required placeholder="e.g. Yanis Varoufakis">{% endif %}
+  <label>Links (one per line)</label>
+  <textarea name="links" placeholder="Wikipedia page, their blog, interviews, articles, Google Scholar…"></textarea>
+  <label>Files (txt, md, html, pdf)</label>
+  <input type="file" name="files" multiple accept=".txt,.md,.html,.htm,.pdf">
+  <label>Notes for the builder</label>
+  <textarea name="notes" placeholder="What to focus on, which era of their views, topics to emphasise or avoid…"></textarea>
+  <p><button>{{ 'Update persona' if persona else 'Build persona' }}</button></p>
+</form>
+{% endblock %}

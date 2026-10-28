@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>Settings</h1>
+<form method="post" class="card">
+  <label>Claude API key</label>
+  <p class="small muted">{% if key_hint %}A key ending in {{ key_hint }} is in use.{% else %}No key yet.{% endif %} Get one at console.anthropic.com under API keys. It is saved to {{ key_file }} on this computer, outside the project folder.</p>
+  <input type="text" name="api_key" placeholder="sk-ant-..." autocomplete="off">
+  <p><button>Save and test</button></p>
+</form>
+<div class="card small">
+  <b>Model:</b> {{ model }} (change with the PERSONA_MODEL environment variable)
+  {% if fake %}<br><b>Offline test mode is on</b> (PERSONA_FAKE_LLM=1): Claude is not called and drafts are placeholders.{% endif %}
+</div>
+{% endblock %}

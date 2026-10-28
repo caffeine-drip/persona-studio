@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>Drafts</h1>
+<form class="row" method="get">
+  <select name="status" style="width:auto">{% for s in ['draft','approved','posted','rejected',''] %}<option value="{{ s }}" {{ 'selected' if s == status }}>{{ s or 'all' }}</option>{% endfor %}</select>
+  <select name="persona" style="width:auto"><option value="">All personas</option>{% for p in personas %}<option value="{{ p.slug }}" {{ 'selected' if p.slug == persona }}>{{ p.name }}</option>{% endfor %}</select>
+  <button class="ghost">Filter</button>
+</form>
+{% for d in drafts %}
+<div class="card">
+  <div class="row" style="justify-content:space-between">
+    <div><b>{{ d.persona_name }}</b> · {{ d.platform }} <span class="pill {{ d.status }}">{{ d.status }}</span></div>
+    <span class="muted small">{{ d.created }}</span>
+  </div>
+  <div class="small muted">On: {% if d.news.url %}<a href="{{ d.news.url }}" target="_blank" rel="noopener">{{ d.news.title }}</a>{% else %}{{ d.news.title }}{% endif %}{% if d.angle %} · angle: {{ d.angle }}{% endif %}</div>
+  <form method="post" action="{{ url_for('update_draft', draft_id=d.id) }}">
+    <textarea name="text" id="t-{{ d.id }}" style="min-height:170px;margin-top:8px">{{ d.text }}</textarea>
+    <div class="row" style="margin-top:6px">
+      <button name="action" value="approved">Approve</button>
+      <button class="ghost" name="action" value="save">Save edit</button>
+      <button class="ghost" name="action" value="posted">Mark posted</button>
+      <button class="ghost" name="action" value="rejected">Reject</button>
+      <button class="ghost" type="button" onclick="navigator.clipboard.writeText(document.getElementById('t-{{ d.id }}').value);this.textContent='Copied'">Copy</button>
+    </div>
+  </form>
+</div>
+{% else %}
+<p class="muted">Nothing here. Draft comments from the <a href="{{ url_for('news') }}">News</a> page.</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="row" style="justify-content:space-between">
+  <h1>{{ p.name }}</h1>
+  <div class="row">
+    <a class="btn" href="{{ url_for('update_persona', slug=p.slug) }}">Add sources and rebuild</a>
+    <a class="btn ghost" href="{{ url_for('edit_persona', slug=p.slug) }}">Edit by hand</a>
+  </div>
+</div>
+<p class="muted small">Version {{ p.version }} · built {{ p.built }} · stored in personas/{{ p.slug }}/</p>
+<div class="card"><b>Disclosure line:</b> {{ p.disclosure }}</div>
+<h2>Persona brief</h2>
+<pre class="md">{{ p.persona_md }}</pre>
+<h2>Sources</h2>
+<pre class="md">{{ p.sources_md }}</pre>
+{% if p.uploads %}<p class="small muted">Uploaded files: {{ p.uploads|join(', ') }}</p>{% endif %}
+<h2>Recent drafts</h2>
+{% for d in drafts %}<div class="card small"><span class="pill {{ d.status }}">{{ d.status }}</span> {{ d.platform }} · {{ d.news.title }}</div>
+{% else %}<p class="muted">None yet. Draft from the <a href="{{ url_for('news') }}">News</a> page.</p>{% endfor %}
+{% endblock %}
